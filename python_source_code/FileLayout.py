@@ -18,7 +18,7 @@ tipo_folha = 0
 
 # Referencia será usado para fornecer o ano, mes e o tipo de ficheiro em referencia
 # Nota: o tipo de folha recebe apenas dois valores padrão (0 - Normal & 1 - primeira Complementar)
-def _Referencia():
+def _Referencia(ano=ano, mes=mes, tipo_folha=tipo_folha):
 
     if (mes <= 9):
         return "{}0{}{}".format(ano, mes, tipo_folha)
@@ -27,13 +27,22 @@ def _Referencia():
         return "{}{}{}".format(ano, mes, tipo_folha)
 
 
+def _Referencia(dia=dia, mes=mes, ano=ano):
+
+    if (mes <= 9 or dia <= 9):
+        return "0{}0{}{}".format(dia, mes, ano)
+
+    else:
+        return "{}{}{}".format(dia, mes, ano)
+
+
 # Nome do Ficheiro
 # O nome do ficheiro para o INSS - Folha de Remunerações obedece a seguinte estrutura
 # Número de Inscrição no INSS (Antigo)
 # Ano de Referência da Folha de Remunerações
 # Mês de Referência da Folha de Remunerações
 # Indicador de Tipo de Folha de Remunerações (0 - Normal / 1 - primeira Complementar)
-def Nome_Ficheiro(n_contribuinte=0):
+def Nome_Ficheiro(n_contribuinte=256):
 
     return "{}{}".format(n_contribuinte, _Referencia())
 
@@ -49,7 +58,7 @@ def Nome_Ficheiro(n_contribuinte=0):
 
 
 def Cabecalho_Ficheiro(tipo_ficheiro="N",
-                       numero_inscricao_empresa_inss="000000000"):
+                       numero_inscricao_empresa_inss="000000256"):
 
     # Estrutura e Tamanho
     # Tipo de Registro -                                Obrigatório: Sim                size: 002
@@ -67,21 +76,16 @@ def Cabecalho_Ficheiro(tipo_ficheiro="N",
     tipo_registro = "00"
 
     # Indica qual é a Referência da Folha de Remunerações no formato (DDMMAAAA)
-    data_referencia = ""  # size 008
-    if (mes <= 9 or dia <= 9):
-        data_referencia = "0{}0{}{}".format(dia, mes, ano)
-
-    else:
-        data_referencia = "{}{}{}".format(dia, mes, ano)
+    data_referencia = _Referencia(dia, mes, ano)  # size 008
 
     # Novo Número de Inscrição do INSS
     numero_inscricao_empresa_inss_nova = "                    "
 
     # Número do Contribuinte Junto ao Ministério das Finanças(NIF)
-    nif = "0000000000          "
+    nif = "5510126032          "
 
     # Nome da Empresa (Razão Social)
-    nome_da_empresa = "AAAAAAAAAAAA AAAAAAAA LDA                                             "
+    nome_da_empresa = "ORGANIZACOES KILAMBAL LDA                                             "
 
     # Código do Município de Endereço da Empresa, conforme relação
     # de municípios disponibilizados no Anexo I - Relação de Municípios
@@ -121,11 +125,11 @@ def Remuneracao_Funcionario_Detalhe():
     tipo_registro = "10"
 
     # Número de Inscrição do INSS consta no Cartão do Segurado
-    numero_inscricao_segurado_inss = "000000000"
+    numero_inscricao_segurado_inss = "005004879"
     numero_inscricao_segurado_inss_novo = "                    "
 
     # Nome do Funcionário (Segurado) conforme cadastrado na Empresa
-    nome_funcionario_segurado = "000000 000000 0000000                                                      "
+    nome_funcionario_segurado = "ANDRE JORGE CAMPOS                                                    "
 
     # Código da Categoria Profissional
     cod_categoria_profissional = "     "
@@ -144,6 +148,12 @@ def Remuneracao_Funcionario_Detalhe():
 
     # Espaços em Branco
     espacos_em_branco = "                              "
+
+    return "{}{}{}{}{}{}{}{}{}{}".format(tipo_registro, numero_inscricao_segurado_inss,
+                                         numero_inscricao_segurado_inss_novo,
+                                         nome_funcionario_segurado, cod_categoria_profissional,
+                                         valor_salario_base, valor_remuneracoes_adicionais,
+                                         inicio_vinculo, fim_vinculo, espacos_em_branco)
 
 
 # Tipo de Registo de finalização das informações do Ficheiro, onde deve conter Resumo de
@@ -176,10 +186,10 @@ def Totalizador_Ficheiro():
     total_remuneracoes_adicionais = "00000000000000"
 
     # Nome Do Responsável Pela Geração Do Ficheiro
-    responsavel_pela_geracao_do_ficheiro = "INSS_AO                                 "
+    responsavel_pela_geracao_do_ficheiro = "FFR_INSS_AO                             "
 
     # E-Mail Do Responsável Pela Geração Do Ficheiro
-    email_responsavel_pela_geracao_do_ficheiro = "inss_ao@inss.co.ao                                "
+    email_responsavel_pela_geracao_do_ficheiro = "ffr@ffr_inss_ao.com                                "
 
     # Espaços em Branco
     espacos_em_branco = "                                        "
