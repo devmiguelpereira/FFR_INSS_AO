@@ -9,5 +9,5 @@ The Payroll is the legal instrument defined for Communicating employee wages and
 In view of the high importance of this declaration, it is imposed as main purpose of this application is to process and issue declaration automatically.
 
 Main goals:
- Be able to process the payroll
- Be able to issue the payslip on file electronic file in text format according to the technical specifications provided by the inss
+- Be able to process the payroll
+- Be able to issue the payslip on file electronic file in text format according to the technical specifications provided by the inss
