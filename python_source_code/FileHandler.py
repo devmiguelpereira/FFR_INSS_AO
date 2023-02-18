@@ -7,17 +7,28 @@ file_path = 'november_inss_2022.csv'
 # imports data from a csv file
 
 
-def importFromFile(file_path=file_path):
-    set = []
+def import_from_file(file_path):
+    employee_data_list = []
 
-    with open(file_path, 'r', encoding='utf-8-sig') as csvfile:
-        valueLines = csv.reader(csvfile, delimiter=',')
-        for line in valueLines:
-            set.append(line)
+    try:
+        with open(file_path, 'r', encoding='utf-8-sig') as csvfile:
+            reader = csv.reader(csvfile, delimiter=',')
+            headers = next(reader)  # skip the header row
+            for row in reader:
+                employee_data_list.append(row)
+    except FileNotFoundError:
+        print(f"File not found: {file_path}")
+        return None
+    except csv.Error as e:
+        print(f"Error reading CSV file {file_path}: {e}")
+        return None
 
-    #set.pop(0)  # deleting the first line with headers
+    if not employee_data_list:
+        print(f"No employee data found in file {file_path}")
+        return None
 
-    return set
+    return employee_data_list
+
 
 
 def create_file():
