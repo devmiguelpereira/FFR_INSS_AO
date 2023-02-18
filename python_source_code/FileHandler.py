@@ -39,7 +39,7 @@ def import_from_file(file_path):
 
 def create_file():
     # imports employee data from a CSV file
-    employee_data_list = importFromFile()
+    employee_data_list = import_from_file()
 
     # handle errors during data import
     if employee_data_list is None:
