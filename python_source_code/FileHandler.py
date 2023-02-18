@@ -8,6 +8,12 @@ file_path = 'november_inss_2022.csv'
 
 
 def import_from_file(file_path):
+
+     # Check if file_path is a valid path to a file
+    if not os.path.isfile(file_path):
+        print(f"Error: {file_path} is not a valid file path.")
+        return None
+
     employee_data_list = []
 
     try:
