@@ -1,6 +1,8 @@
-import os
 import csv
+import os
+
 import FileLayout as fl
+import pandas as pd
 
 file_path = 'november_inss_2022.csv'
 
@@ -8,33 +10,31 @@ file_path = 'november_inss_2022.csv'
 
 
 def import_from_file(file_path):
-
-     # Check if file_path is a valid path to a file
+    
     if not os.path.isfile(file_path):
-        print(f"Error: {file_path} is not a valid file path.")
+        print(f"Error: file {file_path} not found.")
         return None
 
-    employee_data_list = []
-
-    try:
+    _, file_extension = os.path.splitext(file_path)
+    if file_extension == '.csv':
         with open(file_path, 'r', encoding='utf-8-sig') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             headers = next(reader)  # skip the header row
-            for row in reader:
-                employee_data_list.append(row)
-    except FileNotFoundError:
-        print(f"File not found: {file_path}")
-        return None
-    except csv.Error as e:
-        print(f"Error reading CSV file {file_path}: {e}")
-        return None
+            employee_data_list = [row for row in reader]
+        return employee_data_list
 
-    if not employee_data_list:
-        print(f"No employee data found in file {file_path}")
+    elif file_extension == '.xlsx' or file_extension == '.xls':
+        try:
+            employee_data = pd.read_excel(file_path, engine='openpyxl')
+            employee_data_list = employee_data.values.tolist()
+            return employee_data_list
+        except Exception as e:
+            print(f"Error reading Excel file {file_path}: {e}")
+            return None
+
+    else:
+        print(f"Error: file {file_path} is not a CSV or Excel file.")
         return None
-
-    return employee_data_list
-
 
 
 def create_file():
