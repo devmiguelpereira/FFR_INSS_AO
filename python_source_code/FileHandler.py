@@ -32,19 +32,20 @@ def import_from_file(file_path):
 
 
 def create_file():
-    # tries to Open or creates a txt file write the data collected
-    _EmployeesData = importFromFile()
+    # imports employee data from a CSV file
+    employee_data_list = importFromFile()
 
-    print(type(_EmployeesData))
+    # handle errors during data import
+    if employee_data_list is None:
+        print("Error importing employee data. File may be empty or malformed.")
+        return
 
-    file = open(fl.File_name()+".txt", "w+")
-
-    file.write(fl.Header()+"\n")
-
-    for Employee in _EmployeesData:
-        # print(Employee,"Employee Data \n")
-
-        file.write(fl.employee_remunaration_details(Employee)+"\n")
-        print(Employee[1] +" was recorded in file with inss standards \n")
-
-    file.write(fl.finalization_of_file_information())
+    # write employee data to a file
+    file_name = fl.File_name() + ".txt"
+    with open(file_name, "w+") as file:
+        file.write(fl.Header() + "\n")
+        for employee_data in employee_data_list:
+            file.write(fl.employee_remunaration_details(employee_data) + "\n")
+            print(f"{employee_data[1]} was recorded in file with INSS standards.\n")
+        file.write(fl.finalization_of_file_information())
+        print(f"File {file_name} successfully created.")
