@@ -1,0 +1,80 @@
+1.2 Ficheiro da Folha de Remuneracoes
+1.2.1 Definição estrutural dos Campos do Layout
+
+Os campos do layout obedecem a uma posição, a um tipo de campo, a um tamanho, a forma de
+lançamento de decimais e a obrigatoriedade de lançamento:
+
+Posição: Define o Inicio e o Fim do campo dentro da linha do ficheiro, ou seja, o espaço destinado para conter as
+informações relativas ao campo.
+
+Tipos de Campos: As informações contidas nos campos do ficheiro podem ser dos tipos (N, D ou C):
+
+N - Numérico: obrigatoriamente o campo devera ser informado apenas com numeros na totalidade do
+seu tamanho, alinhados da direita para a esquerda, não sendo aceites caracteres especiais (.;/&$#) ou
+alfabéticos (abcDEF). Quando um campo Numérico não possuir informação, o mesmo deve ser
+preenchido com zeros (0), e caso não ocupe a totalidade do tamanho, devera ser preenchido com zeros
+à esquerda;
+
+Exemplo:
+
+Informar o municipio Ingombotas (Luanda) no compo Codigo do Municipio do Tipo de registo 00, sendo que o campo tem tamanho de 5 posições.
+
+Conforme o Anexo I - Relação de Municipios, Ingombotas é o codigo 401, portanto, no layout deve ser informado 00401.
+
+Caso não se deseje informor o municipio ou não se tenha esta informação, deve ser informado 00000.
+
+
+D — Data: O campo devera obrigatoriamente ser informado apenas com numeros na totalidade do seu
+tamanho, não sendo aceites caracteres especiais (.;/&$#) ou alfabéticos (abcDEF). As datas devem ser
+informadas no formato DDMMAAAA (onde, DD = Dia, MM = Més e AAAA = Ano), sem a utilização de
+barras "/" ou hifens "-". Quando um campo Data não possuir informação, o mesmo deve ser preenchido
+com espaços em branco;
+
+Exemplo:
+
+Informar Agosto de 2009 no campo Data de Referência do Tipo de Registo 00, sendo
+que o campo tem tamanho de 8 posições.
+
+No Layout deve ser informado 01082009, sendo que 01 é o primeiro dio do més, 08 é
+o més de Agosto e 2009 é o ano.
+
+Como é um campo obrigatorio, não serão aceites espacos em brancos.
+
+C -Alfanumérico (Texto): O campo deverá ser informado com caracteres alfabéticos (abcDEF), especiais
+(.;/&$#) e/ou numéricos (1234567890), alinhados da esquerda para a direita. Quando um campo
+Alfanumérico não possuir informação, o mesmo deve ser preenchido com espaços em branco. Caso o
+conteudo não ocupe a totalidade do campo, este deve conter espaços em branco até o completar o
+tamanho total do campo.
+
+Exemplo:
+
+Informar o Nome do Funcionorio "Manuel Oliveiro Silva " no Tipo de Registo 10,
+sendo que o campo tem tamanho de 70 posições.
+
+O campo Nome do Funcionario deve conter: Manuel Oliveiro Silvo mais espaços em
+branco até completar o tamanho do campo. Neste caso, o nome do funcionario ocupa
+21 posições, e as restantes 49 posições estariam com espaços em brancos.
+
+Caso não se deseje informar o Nome do Funcionario, ou não se tenha esta
+informação, o campo deve ser informado na sua totalidade com espaços em bronco.
+
+Tamanho: Indica quantas posições na linha do ficheiro, serão ocupadas pelo campo.
+
+Decimais: lndica quantas posições do campo serão utilizadas para informar valores decimais.
+
+Exemplo:
+
+O campo Valor do Salario Base, do fipo de Registo 10, tem tamanho de 14 posições, e
+destas, 2 são decimais.
+
+Para informar salario de AKZ 456.123,78 é preciso utilizar as 14 posições, informando
+zeros a esquerda do valor. Sendo assim, o conteudo a ser informado neste compo é
+00000045612378. Lembrando que campos numéricos não devem conter pontos de milhar
+"." ou ponto decimal ",".
+
+Obrigatorio: Indica se o conteudo do campo é necessário para a validação das informagoes do Ficheiro. Caso não
+sejam informados os dados obrigatórios, o Processamento do Ficheiro será invalidado, logo nao sera
+gerada a guia de pagamento.
+
+Conteudo: Breve descrição do que deve conter o campo do ficheiro
+
