@@ -38,3 +38,12 @@ be carried out by the 10th day following the Reference Month/Year without the ap
 Fines and Interest for delay/payment of the guide.
 
 reference: Payroll Technical Manual version 1.0 (Manual Tecnico Layout Folha).pdf
+
+- Tech stacks and DevTools:
+        - Visual Studio Code
+        - Github
+        - Git
+        - Excel
+        - Python
+        - Pycone
+        - Node.Js
