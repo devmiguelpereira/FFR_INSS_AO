@@ -1,15 +1,8 @@
-import file_standard_format as fsf
+import file_generator as fg
 import file_settings as fs
+import file_standard_format as fsf
 
-
-
-def generate_file_name(company_inss_number: int, paysheet_type: int, year: int, month: int) -> str:
-    # If payslip is complementary then the value is 1 else it is 0 for a normal payslip
-    paysheet_type = "1" if paysheet_type == 1 else "0"
-    return f"{company_inss_number}{year}{month:02d}{paysheet_type}.txt"
-
-
-def header(file_type: str, company_inss_number: str):
+def header(company_dict) -> str:
 
 
     # field in this function
@@ -39,18 +32,22 @@ def header(file_type: str, company_inss_number: str):
     }
 
     field_data = {
+        
 
-        'registration_type':fs.general_configuration['registration_type'],
-        'reference_date': fs.reference_date(),
-        'file_type': fs.general_configuration['file_type'],
+        'registration_type':fs.general_settings['header_configuration']['registration_type'],
+        
+        'reference_date': fsf.format_date(fg.split_date(company_dict['Data'], str_output=True), field_sizes['reference_date']),
+        'file_type': "C" if company_dict['Tipo_Folha'] == "Complementar" else "N",
 
-        'company_inss_number': fs.company_info['company_inss_number'],
-        'new_company_inss_number': fs.company_info['new_company_inss_number'],
+        'company_inss_number':fsf.format_numeric_field(str(company_dict['Numero_Contribuinte']), field_sizes['company_inss_number']),
+        'new_company_inss_number':fsf.format_numeric_field(str(company_dict['Numero_Contribuinte']), field_sizes['new_company_inss_number']),
 
-        'company_fiscal_number': fsf.format_text(fs.company_info['company_fiscal_number'], field_sizes['company_fiscal_number']),
-        'company_name': fsf.format_text(fs.company_info['company_name'],field_sizes['company_name']),
-        'suburb_code': fsf.format_text(fs.company_info['suburb_code'],field_sizes['suburb_code']),
-        'blank_spaces': fsf.format_text(fs.general_configuration['blank_spaces'], field_sizes['blank_spaces'])
+        'company_fiscal_number': fsf.format_text_field(str(company_dict['NIF_da_Empresa']), field_sizes['company_fiscal_number']),
+        'company_name': fsf.format_text_field(str(company_dict['Nome_da_Empresa']),field_sizes['company_name']),
+        
+        
+        'suburb_code': fsf.format_text_field(fs.general_settings['company_info']['suburb_code'],field_sizes['suburb_code']),
+        'blank_spaces': fsf.format_text_field(fs.general_settings['header_configuration']['blank_spaces'], field_sizes['blank_spaces'])
 
         
     }
@@ -67,10 +64,115 @@ def header(file_type: str, company_inss_number: str):
     field_data['blank_spaces']
     )
 
+def employee_record(employee_inss_number,employee_name,base_salary,other_compensation) -> str:
+        # field in this function
+    """
+    'registration_type':                - size 2         
+    'employee_inss_number':             - size 9
+    'new_employee_inss_number':         - size 20
+    'employee_name':                    - size 70
+    'professional_category_code':       - size 5
+    'base_salary':                      - size 14
+    'other_compensation':               - size 14
+    'start_of_employment':              - size 8
+    'end_of_employment':                - size 8
+    'blank_spaces':                     - size 30
 
-def employee_compensation_record():
-    pass
+    """
+
+    field_sizes = {
+        'registration_type': 2,
+        'employee_inss_number': 9,
+        'new_employee_inss_number': 20,
+        'employee_name': 70,
+        'professional_category_code': 5,
+        'base_salary': 14,
+        'other_compensation': 14,
+        'start_of_employment': 8,
+        'end_of_employment': 8,
+        'blank_spaces': 30
+    }
+
+    field_data = {
+        
+
+        'registration_type':fs.general_settings['employee_record_configuration']['registration_type'],
+        'employee_inss_number': fsf.format_numeric_field(str(employee_inss_number), field_sizes['employee_inss_number']),
+        'new_employee_inss_number': fsf.format_numeric_field(str(employee_inss_number), field_sizes['new_employee_inss_number']),
+        'employee_name': fsf.format_text_field(str(employee_name), field_sizes['employee_name']),
+        'professional_category_code': fs.general_settings['employee_record_configuration']['professional_category_code'],
+        'base_salary': fsf.format_salary_field(base_salary, field_sizes['base_salary']),
+        'other_compensation': fsf.format_salary_field(other_compensation, field_sizes['other_compensation']),
+        'start_of_employment': fs.general_settings['employee_record_configuration']['start_of_employment'],
+        'end_of_employment': fs.general_settings['employee_record_configuration']['end_of_employment'],
+        'blank_spaces': fs.general_settings['employee_record_configuration']['blank_spaces']
+
+        
+    }
+
+    return "{}{}{}{}{}{}{}{}{}{}".format(
+    field_data['registration_type'], 
+    field_data['employee_inss_number'], 
+    field_data['new_employee_inss_number'], 
+    field_data['employee_name'],
+    field_data['professional_category_code'], 
+    field_data['base_salary'], 
+    field_data['other_compensation'], 
+    field_data['start_of_employment'],
+    field_data['end_of_employment'],
+    field_data['blank_spaces']
+    )
 
 
-def file_totalizer():
-    pass
+def file_totalizer(responsible_dict):
+
+    # field in this function
+    """
+    'registration_type':                                    - size 2
+    'total_registration_type':                              - size 10
+    'fill_with_zeros':                                      - size 10
+    'base_salary_total':                                    - size 14
+    'other_compensation_total':                             - size 14
+    'responsible_for_generating_the_file':                  - size 40
+    'email_of_the_responsible_for_generating_the_file':     - size 50
+    'blank_spaces':                                         - size 40
+    """
+
+    field_sizes = {
+
+        'registration_type': 2,
+        'total_registration_type':10,
+        'fill_with_zeros': 10,
+        'base_salary_total': 14,
+        'other_compensation_total': 14,
+        'responsible_for_generating_the_file': 40,
+        'email_of_the_responsible_for_generating_the_file': 50,
+        'blank_spaces': 40
+    }
+
+    
+    field_data = {
+
+        'registration_type':fs.general_settings['file_totalizer']['registration_type'],
+        'total_registration_type':fs.general_settings['file_totalizer']['total_registration_type'],
+        'fill_with_zeros': fs.general_settings['file_totalizer']['fill_with_zeros'],
+        'base_salary_total': fsf.format_salary_field(str(responsible_dict['Total_Salario_Base']), field_sizes['base_salary_total']),
+        'other_compensation_total': fsf.format_salary_field(str(responsible_dict['Total_Outras_Remuneracoes']), field_sizes['other_compensation_total']),
+        'responsible_for_generating_the_file': fsf.format_text_field(str(responsible_dict['Responsavel_do_Ficheiro']), field_sizes['responsible_for_generating_the_file']),
+        'email_of_the_responsible_for_generating_the_file': fsf.format_text_field(str(responsible_dict['Email_do_Responsavel']), field_sizes['email_of_the_responsible_for_generating_the_file']),
+        'blank_spaces': fs.general_settings['file_totalizer']['blank_spaces']
+
+        
+    }
+
+    return "{}{}{}{}{}{}{}{}".format(
+        field_data['registration_type'], 
+        field_data['total_registration_type'], 
+        field_data['fill_with_zeros'], 
+        field_data['base_salary_total'],
+        field_data['other_compensation_total'], 
+        field_data['responsible_for_generating_the_file'], 
+        field_data['email_of_the_responsible_for_generating_the_file'], 
+        field_data['blank_spaces']
+        )
+

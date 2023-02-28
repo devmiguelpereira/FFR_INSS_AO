@@ -1,5 +1,6 @@
 from datetime import date
 
+
 def reference_date():
     
     data = date.today()
